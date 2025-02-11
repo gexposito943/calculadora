@@ -1,0 +1,35 @@
+name: Test Calculadora
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16.x'
+        
+    - name: Install dependencies
+      run: npm install
+      
+    - name: Run tests
+      run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadless
+      
+    - name: Build
+      run: npm run build
+      
+    - name: Log error message
+      if: failure()
+      run: |
+        echo "❌ ERROR: Els tests han fallat en el últim push"
+        echo "Revisa els canvis i assegura't que tots els tests passen"
+        exit 1
