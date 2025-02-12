@@ -1,9 +1,8 @@
 name: Test Calculadora
 
+# Només s'executarà quan es faci push
 on:
   push:
-    branches: [ master ]
-  pull_request:
     branches: [ master ]
 
 jobs:
@@ -13,28 +12,34 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     
-    - name: Setup Node.js
+    - name: Configuració Node.js
       uses: actions/setup-node@v2
       with:
         node-version: '18.x'
         
-    - name: Install dependencies
+    - name: Instal·lació de dependències
       run: |
         npm install
         npm install -g @angular/cli
         
-    - name: Install Chrome
+    - name: Instal·lació Chrome
       run: |
         sudo apt-get update
         sudo apt-get install -y chromium-browser
         
-    - name: Run tests
+    - name: Execució dels tests
       run: |
         ng test --no-watch --browsers=ChromeHeadless --code-coverage=false
       
-    - name: Log error message
+    - name: Missatge d'èxit
+      if: success()
+      run: |
+        echo "✅ ÈXIT: Tots els tests han passat correctament!"
+        echo "El codi està llest per ser integrat"
+        
+    - name: Missatge d'error
       if: failure()
       run: |
-        echo "❌ ERROR: Els tests han fallat en el últim push"
+        echo "❌ ERROR: Els tests han fallat en l'últim push"
         echo "Revisa els canvis i assegura't que tots els tests passen"
         exit 1
