@@ -21,6 +21,6 @@ describe('CalculadoraComponent', () => {
     component.pressOperator('+');
     component.pressNumber('2');
     component.calculate();
-    expect(component.displayValue).toBe('40');  
+    expect(component.displayValue).toBe('4');  
   });
 });
